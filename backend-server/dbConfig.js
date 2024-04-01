@@ -1,8 +1,8 @@
 const config = {
-    user: 'your_username',
-    password: 'your_password',
-    server: 'your_server_address',
-    database: 'your_database_name',
+    user: 'marie-mule',
+    password: '84CN68Qp@819075',
+    server: '192.168.100.8',
+    database: 'master',
     options: {
         encrypt: true, // For Microsoft SQL Server
         trustServerCertificate: true, // For Microsoft SQL Server

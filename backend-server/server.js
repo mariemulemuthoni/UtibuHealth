@@ -18,6 +18,23 @@ poolConnect.then((pool) => {
 });
 
 // Define API endpoints
+
+// Test endpoint to check database connection
+app.get('/test-db-connection', async (req, res) => {
+    try {
+        // Execute a simple SQL query to fetch the current date and time
+        const result = await pool.query('SELECT GETDATE() AS CurrentDateTime');
+
+        // Send the result as JSON
+        res.json({ currentDateTime: result.recordset[0].CurrentDateTime });
+    } catch (error) {
+        // If an error occurs, send an error response
+        console.error('Error testing database connection:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Root endpoint
 app.get('/', (req, res) => {
     res.send('Backend server is running');
 });
