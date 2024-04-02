@@ -5,6 +5,7 @@ export const LandingScreenStyles = StyleSheet.create({
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
+            backgroundColor: 'white',
       },
 
       logo: {
