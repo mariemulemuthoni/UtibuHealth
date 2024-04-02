@@ -27,6 +27,13 @@ export const OrderMedicationScreenStyles = StyleSheet.create({
         marginBottom: 10,
     },
 
+    medicationImage: {
+        width: 100,
+        height: 80,
+        borderRadius: 5,
+        marginRight: 10,
+    },
+
     medicationName: {
         fontWeight: 'bold',
     },

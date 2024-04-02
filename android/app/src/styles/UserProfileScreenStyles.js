@@ -3,33 +3,44 @@ import { StyleSheet } from 'react-native';
 export const UserProfileScreenStyles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
-        alignItems: 'center',
-        justifyContent: 'center',
+        backgroundColor: '#fff',
+        padding: 20,
+    },
+
+    userProfileContent: {
+        marginVertical: 20,
     },
 
     heading: {
-        fontSize: 30,
+        fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 30,
+        marginBottom: 20,
     },
 
     userInfoContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 30,
+    },
+
+    iconContainer: {
+        width: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    icon: {
+        fontSize: 30,
     },
 
     label: {
+        fontSize: 16,
         fontWeight: 'bold',
-        marginRight: 10,
-        paddingBottom: 20,
-        fontSize: 20,
+        marginLeft: 30,
     },
 
     value: {
-        flex: 1,
-        paddingBottom: 20,
-        fontSize: 20,
+        fontSize: 16,
+        marginLeft: 30,
     },
 });

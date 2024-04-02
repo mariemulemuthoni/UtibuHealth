@@ -1,72 +1,41 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { DashboardScreenStyles } from '../styles/DashboardScreenStyles';
 import { useNavigation } from '@react-navigation/native';
+
+// Define avatar images for each screen
+const avatars = {
+    UserProfile: require('../assets/images/user_profile_avatar.png'),
+    OrderMedication: require('../assets/images/medication_avatar.jpg'),
+    Cart: require('../assets/images/cart_avatar.png'),
+    OrderHistory: require('../assets/images/history_avatar.png'),
+    PaymentStatement: require('../assets/images/payment_avatar.png'),
+};
 
 const DashboardScreen = () => {
     const navigation = useNavigation();
 
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
+    // Function to navigate to user profile screen
+    const goToScreen = (screenName) => {
+        navigation.navigate(screenName);
     };
 
-    const goToUserProfile = () => {
-        navigation.navigate('UserProfile', { firstName: 'John', lastName: 'Doe', email: 'john@example.com', phoneNumber: '1234567890' });
-    };
-
-    const goToOrderMedication = () => {
-        navigation.navigate('OrderMedication');
-    };
-
-    /*const goToShoppingCart = () => {
-        navigation.navigate('CartScreen');
-    };
-
-    const goToOrderHistory = () => {
-        navigation.navigate('OrderHistoryScreen');
-    };
-
-    const goToPaymentStatement = () => {
-        navigation.navigate('PaymentStatementScreen');
-    };*/
+    // Render a card for each screen
+    const renderScreenCard = (screenName) => (
+        <TouchableOpacity style={DashboardScreenStyles.card} onPress={() => goToScreen(screenName)}>
+            <Image source={avatars[screenName]} style={DashboardScreenStyles.avatar} />
+            <Text style={DashboardScreenStyles.cardText}>{screenName}</Text>
+        </TouchableOpacity>
+    );
 
     return (
         <View style={DashboardScreenStyles.container}>
-            {/* Sidebar */}
-            <View style={DashboardScreenStyles.sidebar}>
-                <TouchableOpacity onPress={toggleSidebar}>
-                    <Text style={DashboardScreenStyles.sidebarToggle}>UTIBU HEALTH</Text>
-                </TouchableOpacity>
-
-                <View style={isSidebarOpen ? DashboardScreenStyles.sidebarContent : DashboardScreenStyles.hiddenSidebarContent}>
-                    <TouchableOpacity style={DashboardScreenStyles.sidebarLink} onPress={goToUserProfile}>
-                        <Text>User Profile</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={DashboardScreenStyles.sidebarLink} onPress={goToOrderMedication}>
-                        <Text>Order Medication</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={DashboardScreenStyles.sidebarLink}>
-                        <Text>Shopping Cart</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={DashboardScreenStyles.sidebarLink}>
-                        <Text>Order History</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={DashboardScreenStyles.sidebarLink}>
-                        <Text>Payment Statements</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            {/* Main Content */}
-            <View style={DashboardScreenStyles.mainContent}>
-                <Text>Products Page</Text>
-                {/* Add product listing and order functionality here */}
+            <View style={DashboardScreenStyles.cardContainer}>
+                {renderScreenCard('UserProfile')}
+                {renderScreenCard('OrderMedication')}
+                {renderScreenCard('Cart')}
+                {renderScreenCard('OrderHistory')}
+                {renderScreenCard('PaymentStatement')}
             </View>
         </View>
     );

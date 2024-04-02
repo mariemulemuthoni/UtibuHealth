@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, Image } from 'react-native';
 import { OrderMedicationScreenStyles } from '../styles/OrderMedicationScreenStyles';
 
 // Sample data for medication products
@@ -45,8 +45,11 @@ const OrderMedicationScreen = () => {
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => handleSelectMedication(item)}>
                         <View style={OrderMedicationScreenStyles.medicationItem}>
-                            <Text style={OrderMedicationScreenStyles.medicationName}>{item.name}</Text>
-                            <Text style={OrderMedicationScreenStyles.medicationPrice}>{item.price}</Text>
+                            <Image source={item.image} style={OrderMedicationScreenStyles.medicationImage} />
+                            <View>
+                                <Text style={OrderMedicationScreenStyles.medicationName}>{item.name}</Text>
+                                <Text style={OrderMedicationScreenStyles.medicationPrice}>{item.price}</Text>
+                            </View>
                         </View>
                         {selectedMedication && selectedMedication.id === item.id && (
                             <View style={OrderMedicationScreenStyles.medicationDetails}>
