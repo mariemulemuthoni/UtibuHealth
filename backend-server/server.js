@@ -1,20 +1,21 @@
 const express = require('express');
 const app = express();
 const port = 3000; // Choose any port you prefer
-const mssql = require('mssql');
+const sql = require('mssql');
 const dbConfig = require('./dbConfig');
 
 // Middleware
 app.use(express.json());
 
 // Database connection pool
-const pool = new mssql.ConnectionPool(dbConfig);
-const poolConnect = pool.connect();
+const pool = new sql.ConnectionPool(dbConfig);
 
-poolConnect.then((pool) => {
-    console.log('Connected to the database');
+pool.connect().then((pool) => {
+    console.log('Connected to the SQL Server');
 }).catch((err) => {
-    console.error('Error connecting to the database:', err);
+    console.error('Connection Error:', err);
+    // More descriptive error message for debugging
+    console.error('Failed to connect to database. Please check the server address and credentials.');
 });
 
 // Define API endpoints

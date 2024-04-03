@@ -1,8 +1,12 @@
+const dotenv = require('dotenv');
+
+dotenv.config(); // Load environment variables from .env file
+
 const config = {
-    user: 'marie-mule',
-    password: '84CN68Qp@819075',
-    server: '192.168.100.8',
-    database: 'master',
+    user: process.env.DB_USER,
+    password: '', // Leave blank for Windows Authentication
+    server: process.env.DB_SERVER, // Use ".\\" for local instance
+    database: process.env.DB_DATABASE,
     options: {
         encrypt: true, // For Microsoft SQL Server
         trustServerCertificate: true, // For Microsoft SQL Server
