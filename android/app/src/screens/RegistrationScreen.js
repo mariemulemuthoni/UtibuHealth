@@ -19,7 +19,7 @@ const RegisterScreen = () => {
             }
 
             try {
-                  const response = await axios.post('http://localhost:3000/api/register', {
+                  const response = await axios.post('http://192.168.100.16:3000/api/register', {
                         idNumber,
                         firstName,
                         lastName,

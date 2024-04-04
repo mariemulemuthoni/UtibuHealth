@@ -2,19 +2,22 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { LoginScreenStyles } from '../styles/LoginScreenStyles';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native'; // Import navigation hook
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigation = useNavigation(); // Initialize navigation
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/api/login', {
+      const response = await axios.post('http://192.168.100.16:3000/api/login', {
         email,
         password
       });
       alert(response.data.message);
-      // Navigate to dashboard or perform other actions upon successful login
+      // Navigate to dashboard upon successful login
+      navigation.navigate('Dashboard');
     } catch (error) {
       console.error('Error logging in:', error);
       alert('An error occurred. Please try again later.');
