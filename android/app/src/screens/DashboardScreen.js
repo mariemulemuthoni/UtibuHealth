@@ -20,11 +20,18 @@ const DashboardScreen = () => {
         navigation.navigate(screenName);
     };
 
+    // Function to format screen name (convert camel case to spaced words)
+    const formatScreenName = (name) => {
+        return name
+            .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+            .replace(/^./, (str) => str.toUpperCase()); // Capitalize first letter
+    };
+
     // Render a card for each screen
     const renderScreenCard = (screenName) => (
         <TouchableOpacity style={DashboardScreenStyles.card} onPress={() => goToScreen(screenName)}>
             <Image source={avatars[screenName]} style={DashboardScreenStyles.avatar} />
-            <Text style={DashboardScreenStyles.cardText}>{screenName}</Text>
+            <Text style={DashboardScreenStyles.cardText}>{formatScreenName(screenName)}</Text>
         </TouchableOpacity>
     );
 

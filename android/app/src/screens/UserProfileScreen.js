@@ -8,6 +8,7 @@ const UserProfileScreen = () => {
 
     // Dummy data for user profile
     const userData = {
+        idNumber: '40254809',
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
@@ -23,6 +24,16 @@ const UserProfileScreen = () => {
             {/* User Profile Content */}
             <View style={UserProfileScreenStyles.userProfileContent}>
                 <Text style={UserProfileScreenStyles.heading}>Your Profile Information</Text>
+
+                <View style={UserProfileScreenStyles.userInfoContainer}>
+                    <View style={UserProfileScreenStyles.iconContainer}>
+                        <Text style={UserProfileScreenStyles.icon}>🆔</Text>
+                    </View>
+                    <View>
+                        <Text style={UserProfileScreenStyles.label}>ID Number:</Text>
+                        <Text style={UserProfileScreenStyles.value}>{userData.idNumber}</Text>
+                    </View>
+                </View>
 
                 <View style={UserProfileScreenStyles.userInfoContainer}>
                     <View style={UserProfileScreenStyles.iconContainer}>

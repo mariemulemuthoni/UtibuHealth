@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { RegistrationScreenStyles } from '../styles/RegistrationScreenStyles';
 
 const RegisterScreen = () => {
+      const [idNumber, setidNumber] = useState('');
       const [firstName, setFirstName] = useState('');
       const [lastName, setLastName] = useState('');
       const [email, setEmail] = useState('');
@@ -17,6 +18,13 @@ const RegisterScreen = () => {
       return (
             <View style={RegistrationScreenStyles.container}>
                   <Text style={RegistrationScreenStyles.heading}>Register to Utibu Health</Text>
+
+                   <TextInput
+                         style={RegistrationScreenStyles.input}
+                         placeholder="ID Number :"
+                         value={idNumber}
+                         onChangeText={setidNumber}
+                       />
 
                   <TextInput
                           style={RegistrationScreenStyles.input}

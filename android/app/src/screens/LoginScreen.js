@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { LoginScreenStyles } from '../styles/LoginScreenStyles';
 
 const LoginScreen = () => {
-      const [email, setEmail] = useState('');
+      const [idNumber, setidNumber] = useState('');
       const [password, setPassword] = useState('');
 
       const handleLogin = () => {
@@ -16,9 +16,9 @@ const LoginScreen = () => {
 
                   <TextInput
                     style={LoginScreenStyles.input}
-                    placeholder="Enter your email address"
-                    value={email}
-                    onChangeText={setEmail}
+                    placeholder="Enter your ID Number"
+                    value={idNumber}
+                    onChangeText={setidNumber}
                   />
 
                   <TextInput
