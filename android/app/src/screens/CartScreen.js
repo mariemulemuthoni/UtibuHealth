@@ -1,83 +1,110 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Image, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, FlatList, Image, TextInput, Alert } from 'react-native';
 import { CartScreenStyles } from '../styles/CartScreenStyles';
 
-// Sample data for medication products in the shopping cart
-const cartData = [
-    {
-        id: 1,
-        name: 'Medication 1',
-        image: require('../assets/images/medication1.jpg'),
-        price: 10,
-        quantity: 2,
-    },
-    {
-        id: 2,
-        name: 'Medication 2',
-        image: require('../assets/images/medication2.jpg'),
-        price: 15,
-        quantity: 1,
-    },
-    // Add more medication items as needed
-];
+const ShoppingCartScreen = ({ route }) => {
+    const { cartItems } = route.params;
+    const [updatedCartItems, setUpdatedCartItems] = useState(cartItems);
 
-const ShoppingCartScreen = () => {
-    const [deliveryOption, setDeliveryOption] = useState('pickup');
+    useEffect(() => {
+        if (route.params?.updatedCartItems) {
+            setUpdatedCartItems(route.params.updatedCartItems);
+        }
+    }, [route.params?.updatedCartItems]);
 
-    // Function to calculate total price of items in the cart
+    const calculateItemPrice = (item) => {
+        return item.price * item.quantity;
+    };
+
     const calculateTotalPrice = () => {
         let totalPrice = 0;
-        cartData.forEach(item => {
-            totalPrice += item.price * item.quantity;
+        updatedCartItems.forEach(item => {
+            totalPrice += calculateItemPrice(item);
         });
         return totalPrice;
     };
 
-    // Function to handle changing delivery option
-    const handleDeliveryOptionChange = (option) => {
-        setDeliveryOption(option);
+    const handleRemoveItem = (itemId) => {
+        const updatedItems = updatedCartItems.filter(item => item.id !== itemId);
+        setUpdatedCartItems(updatedItems);
+    };
+
+    const handleQuantityChange = (itemId, text) => {
+        // Check if text is empty or undefined
+        if (!text || text.trim() === '') {
+            // If empty or undefined, set quantity to 0
+            const updatedItems = updatedCartItems.map(item => {
+                if (item.id === itemId) {
+                    return { ...item, quantity: 0 };
+                }
+                return item;
+            });
+            setUpdatedCartItems(updatedItems);
+            return; // Exit the function
+        }
+
+        // Parse the input as an integer
+        const quantity = parseInt(text);
+
+        // Check if quantity is a valid number
+        if (!isNaN(quantity)) {
+            // Update the quantity of the item
+            const updatedItems = updatedCartItems.map(item => {
+                if (item.id === itemId) {
+                    return { ...item, quantity: quantity };
+                }
+                return item;
+            });
+            setUpdatedCartItems(updatedItems);
+        }
+    };
+
+    const handleCheckout = () => {
+        if (updatedCartItems.length > 0) {
+            // Implement checkout logic here
+            Alert.alert('Success', 'Checkout successful');
+            // Reset cart items after checkout
+            setUpdatedCartItems([]);
+        } else {
+            Alert.alert('Error', 'Your cart is empty');
+        }
     };
 
     return (
         <View style={CartScreenStyles.container}>
-            {/* Cart Items */}
-            <FlatList
-                data={cartData}
-                renderItem={({ item }) => (
-                    <View style={CartScreenStyles.cartItem}>
-                        <Image source={item.image} style={CartScreenStyles.medicationImage} />
-                        <View style={CartScreenStyles.medicationDetails}>
-                            <Text style={CartScreenStyles.medicationName}>{item.name}</Text>
-                            <Text style={CartScreenStyles.medicationPrice}>Price: ${item.price}</Text>
-                            <Text style={CartScreenStyles.quantityText}>Quantity:</Text>
-                            <TextInput
-                                style={CartScreenStyles.quantityInput}
-                                value={item.quantity.toString()}
-                                keyboardType="numeric"
-                                onChangeText={(text) => console.log(text)}
-                            />
+            {updatedCartItems.length > 0 ? (
+                <FlatList
+                    data={updatedCartItems}
+                    renderItem={({ item }) => (
+                        <View style={CartScreenStyles.cartItem}>
+                            <Image source={{ uri: item.image }} style={CartScreenStyles.medicationImage} />
+                            <View style={CartScreenStyles.medicationDetails}>
+                                <Text style={CartScreenStyles.medicationName}>{item.name}</Text>
+                                <Text style={CartScreenStyles.medicationPrice}>Price: ${item.price}</Text>
+                                <Text style={CartScreenStyles.quantityText}>Quantity:</Text>
+                                <TextInput
+                                    style={CartScreenStyles.quantityInput}
+                                    value={item.quantity.toString()}
+                                    keyboardType="numeric"
+                                    onChangeText={(text) => handleQuantityChange(item.id, parseInt(text))}
+                                />
+                                <TouchableOpacity onPress={() => handleRemoveItem(item.id)}>
+                                    <Text style={CartScreenStyles.removeItemButton}>Remove</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                )}
-                keyExtractor={(item) => item.id.toString()}
-            />
+                    )}
+                    keyExtractor={(item) => item.id.toString()}
+                />
+            ) : (
+                <Text style={CartScreenStyles.emptyCartText}>Your cart is empty</Text>
+            )}
 
-            {/* Delivery Options */}
-            <View style={CartScreenStyles.deliveryOptions}>
-                <TouchableOpacity
-                    style={[CartScreenStyles.deliveryOptionButton, deliveryOption === 'pickup' && CartScreenStyles.selectedDeliveryOption]}
-                    onPress={() => handleDeliveryOptionChange('pickup')}>
-                    <Text>Pickup</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[CartScreenStyles.deliveryOptionButton, deliveryOption === 'delivery' && CartScreenStyles.selectedDeliveryOption]}
-                    onPress={() => handleDeliveryOptionChange('delivery')}>
-                    <Text>Delivery</Text>
-                </TouchableOpacity>
-            </View>
-
-            {/* Total Price */}
             <Text style={CartScreenStyles.totalPriceText}>Total Price: ${calculateTotalPrice()}</Text>
+
+            <TouchableOpacity style={CartScreenStyles.checkoutButton} onPress={handleCheckout}>
+                <Text>Checkout</Text>
+            </TouchableOpacity>
         </View>
     );
 };

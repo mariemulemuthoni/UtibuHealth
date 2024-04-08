@@ -64,4 +64,17 @@ export const OrderMedicationScreenStyles = StyleSheet.create({
         borderRadius: 5,
         alignItems: 'center',
     },
+
+    viewCartButton: {
+        backgroundColor: '#0080ff',
+        alignItems: 'center',
+        padding: 15,
+        borderRadius: 5,
+        marginTop: 20,
+    },
+
+    viewCartButtonText: {
+        color: '#ffffff',
+        fontWeight: 'bold',
+    },
 });

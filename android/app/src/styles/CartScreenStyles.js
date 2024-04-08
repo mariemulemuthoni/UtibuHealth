@@ -61,6 +61,12 @@ export const CartScreenStyles = StyleSheet.create({
         backgroundColor: 'lightblue',
     },
 
+    removeItemButton: {
+        marginTop: 5,
+        color: 'red',
+        fontWeight: 'bold',
+    },
+
     totalPriceText: {
         fontWeight: 'bold',
         fontSize: 18,

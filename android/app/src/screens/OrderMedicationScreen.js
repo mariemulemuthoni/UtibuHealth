@@ -1,37 +1,70 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
 import { OrderMedicationScreenStyles } from '../styles/OrderMedicationScreenStyles';
+import { useNavigation } from '@react-navigation/native';
 
-// Sample data for medication products
-const medicationData = [
-    {
-        id: 1,
-        name: 'Medication 1',
-        image: require('../assets/images/medication1.jpg'),
-        price: '$10',
-        description: 'Description for Medication 1',
-        instructions: 'Instructions for Medication 1',
-        contraindications: 'Contraindications for Medication 1',
-    },
-    // Add more medication items as needed
-];
-
-const OrderMedicationScreen = () => {
+const OrderMedicationScreen = ({ route }) => {
+    const navigation = useNavigation();
+    const [medicationData, setMedicationData] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedMedication, setSelectedMedication] = useState(null);
     const [selectedQuantity, setSelectedQuantity] = useState(1);
+    const [cartItems, setCartItems] = useState([]);
+
+    useEffect(() => {
+        fetchMedicationData();
+    }, []);
+
+    useEffect(() => {
+        if (route.params?.updatedCartItems) {
+            setCartItems(route.params.updatedCartItems);
+        }
+    }, [route.params?.updatedCartItems]);
+
+    const fetchMedicationData = async () => {
+        try {
+            const response = await fetch('http://192.168.100.8:3000/api/medication');
+            const data = await response.json();
+            setMedicationData(data);
+        } catch (error) {
+            console.error('Error fetching medication data:', error);
+            // Handle error
+        }
+    };
 
     const handleSelectMedication = (medication) => {
         setSelectedMedication(medication);
     };
 
     const handleAddToCart = () => {
-        // Implement logic to add selected medication to cart
+        if (selectedMedication) {
+            const alreadyInCart = cartItems.some(item => item.id === selectedMedication.medicationID);
+            if (alreadyInCart) {
+                Alert.alert('Error', 'This medication is already in your cart');
+            } else {
+                const newItem = {
+                    id: selectedMedication.medicationID,
+                    name: selectedMedication.medicationName,
+                    image: selectedMedication.medicationImage,
+                    price: selectedMedication.medicationPrice,
+                    quantity: selectedQuantity
+                };
+                setCartItems([...cartItems, newItem]);
+                setSelectedMedication(null);
+                setSelectedQuantity(1);
+                Alert.alert('Success', 'Item added to cart');
+            }
+        } else {
+            Alert.alert('Error', 'Please select a medication');
+        }
+    };
+
+    const handleViewCart = () => {
+        navigation.navigate('Cart', { cartItems });
     };
 
     return (
         <View style={OrderMedicationScreenStyles.container}>
-            {/* Search Input */}
             <TextInput
                 style={OrderMedicationScreenStyles.searchInput}
                 placeholder="Search medication by disease"
@@ -39,23 +72,24 @@ const OrderMedicationScreen = () => {
                 onChangeText={setSearchQuery}
             />
 
-            {/* Medication List */}
             <FlatList
-                data={medicationData.filter(med => med.name.toLowerCase().includes(searchQuery.toLowerCase()))}
+                data={medicationData.filter(med => med.medicationName.toLowerCase().includes(searchQuery.toLowerCase()))}
                 renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => handleSelectMedication(item)}>
-                        <View style={OrderMedicationScreenStyles.medicationItem}>
-                            <Image source={item.image} style={OrderMedicationScreenStyles.medicationImage} />
-                            <View>
-                                <Text style={OrderMedicationScreenStyles.medicationName}>{item.name}</Text>
-                                <Text style={OrderMedicationScreenStyles.medicationPrice}>{item.price}</Text>
+                    <View>
+                        <TouchableOpacity onPress={() => handleSelectMedication(item)}>
+                            <View style={OrderMedicationScreenStyles.medicationItem}>
+                                <Image source={{ uri: item.medicationImage }} style={OrderMedicationScreenStyles.medicationImage} />
+                                <View>
+                                    <Text style={OrderMedicationScreenStyles.medicationName}>{item.medicationName}</Text>
+                                    <Text style={OrderMedicationScreenStyles.medicationPrice}>Price: ${item.medicationPrice}</Text>
+                                </View>
                             </View>
-                        </View>
-                        {selectedMedication && selectedMedication.id === item.id && (
-                            <View style={OrderMedicationScreenStyles.medicationDetails}>
-                                <Text>Description: {item.description}</Text>
-                                <Text>Instructions: {item.instructions}</Text>
-                                <Text>Contraindications: {item.contraindications}</Text>
+                        </TouchableOpacity>
+                        {selectedMedication && selectedMedication.medicationID === item.medicationID && (
+                            <View style={OrderMedicationScreenStyles.selectedMedicationDetails}>
+                                <Text>Description: {selectedMedication.medicationDescription}</Text>
+                                <Text>Instructions: {selectedMedication.medicationInstructions}</Text>
+                                <Text>Contraindications: {selectedMedication.medicationContraindications}</Text>
                                 <TextInput
                                     style={OrderMedicationScreenStyles.quantityInput}
                                     placeholder="Enter quantity"
@@ -68,10 +102,14 @@ const OrderMedicationScreen = () => {
                                 </TouchableOpacity>
                             </View>
                         )}
-                    </TouchableOpacity>
+                    </View>
                 )}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.medicationID.toString()}
             />
+
+            <TouchableOpacity style={OrderMedicationScreenStyles.viewCartButton} onPress={handleViewCart}>
+                <Text>View Cart</Text>
+            </TouchableOpacity>
         </View>
     );
 };

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { LoginScreenStyles } from '../styles/LoginScreenStyles';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native'; // Import navigation hook
+import { LoginScreenStyles } from '../styles/LoginScreenStyles';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -11,7 +11,7 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://192.168.100.16:3000/api/login', {
+      const response = await axios.post('http://192.168.100.8:3000/api/login', {
         email,
         password
       });
@@ -24,6 +24,7 @@ const LoginScreen = () => {
     }
   };
 
+  // UI for login screen
   return (
     <View style={LoginScreenStyles.container}>
       <Text style={LoginScreenStyles.heading}>Continue to Utibu Health</Text>
