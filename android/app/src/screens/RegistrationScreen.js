@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { RegistrationScreenStyles } from '../styles/RegistrationScreenStyles';
 import axios from 'axios';
 
-const RegisterScreen = () => {
+const RegisterScreen = ({ navigation }) => {
       const [idNumber, setidNumber] = useState('');
       const [firstName, setFirstName] = useState('');
       const [lastName, setLastName] = useState('');
@@ -14,12 +14,12 @@ const RegisterScreen = () => {
 
       const handleRegister = async () => {
             if (password !== confirmPassword) {
-                  alert('Passwords do not match');
+                  Alert.alert('Passwords do not match');
                   return;
             }
 
             try {
-                  const response = await axios.post('http://192.168.100.8:3000/api/register', {
+                  const response = await axios.post('http://10.0.2.2:3000/api/register', {
                         idNumber,
                         firstName,
                         lastName,
@@ -27,10 +27,20 @@ const RegisterScreen = () => {
                         phoneNumber,
                         password
                   });
-                  alert(response.data.message);
+                  Alert.alert(
+                        'Success',
+                        response.data.message,
+                        [
+                              {
+                                    text: 'OK',
+                                    onPress: () => navigation.navigate('Login'),
+                              },
+                        ],
+                        { cancelable: false }
+                  );
             } catch (error) {
                   console.error('Error registering user:', error);
-                  alert('An error occurred. Please try again later.');
+                  Alert.alert('An error occurred. Please try again later.');
             }
       };
 

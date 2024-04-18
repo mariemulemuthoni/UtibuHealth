@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native'; // Import navigation hook
+import { useNavigation } from '@react-navigation/native';
 import { LoginScreenStyles } from '../styles/LoginScreenStyles';
 
 const LoginScreen = () => {
@@ -11,20 +11,18 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://192.168.100.8:3000/api/login', {
+      const response = await axios.post('http://10.0.2.2:3000/api/login', {
         email,
         password
       });
       alert(response.data.message);
-      // Navigate to dashboard upon successful login
-      navigation.navigate('Dashboard');
+      navigation.navigate('Dashboard', { user: response.data.user });
     } catch (error) {
       console.error('Error logging in:', error);
       alert('An error occurred. Please try again later.');
     }
   };
 
-  // UI for login screen
   return (
     <View style={LoginScreenStyles.container}>
       <Text style={LoginScreenStyles.heading}>Continue to Utibu Health</Text>

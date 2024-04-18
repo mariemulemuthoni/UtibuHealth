@@ -17,7 +17,9 @@ const AppNavigator = () => {
       return (
             <Stack.Navigator initialRouteName="Welcome">
                   <Stack.Screen name="Welcome" component={LandingScreen} options={{ headerShown: false }} />
-                  <Stack.Screen name="Register" component={RegistrationScreen} />
+                  <Stack.Screen name="Register">
+                        {({ navigation }) => <RegistrationScreen navigation={navigation} />}
+                  </Stack.Screen>
                   <Stack.Screen name="Login" component={LoginScreen} />
                   <Stack.Screen name="Dashboard" component={DashboardScreen} />
                   <Stack.Screen name="UserProfile" component={UserProfileScreen} />

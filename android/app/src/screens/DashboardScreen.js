@@ -1,6 +1,6 @@
+import { DashboardScreenStyles } from '../styles/DashboardScreenStyles';
 import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import { DashboardScreenStyles } from '../styles/DashboardScreenStyles';
 import { useNavigation } from '@react-navigation/native';
 
 // Define avatar images for each screen
@@ -12,12 +12,13 @@ const avatars = {
     PaymentStatement: require('../assets/images/payment_avatar.png'),
 };
 
-const DashboardScreen = () => {
+const DashboardScreen = ({ route }) => {
     const navigation = useNavigation();
+    const { user } = route.params;
 
     // Function to navigate to user profile screen
     const goToScreen = (screenName) => {
-        navigation.navigate(screenName);
+        navigation.navigate(screenName, { user });
     };
 
     // Function to format screen name (convert camel case to spaced words)

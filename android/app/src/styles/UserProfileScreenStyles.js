@@ -43,4 +43,20 @@ export const UserProfileScreenStyles = StyleSheet.create({
         fontSize: 16,
         marginLeft: 30,
     },
+
+    button: {
+        backgroundColor: 'blue',
+        width: '80%',
+        height: 40,
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+        marginLeft: 35,
+    },
+
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
 });

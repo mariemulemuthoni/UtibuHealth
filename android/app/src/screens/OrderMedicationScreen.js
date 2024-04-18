@@ -23,7 +23,7 @@ const OrderMedicationScreen = ({ route }) => {
 
     const fetchMedicationData = async () => {
         try {
-            const response = await fetch('http://192.168.100.8:3000/api/medication');
+            const response = await fetch('http://10.0.2.2:3000/api/medication');
             const data = await response.json();
             setMedicationData(data);
         } catch (error) {

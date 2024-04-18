@@ -3,7 +3,8 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { UserProfileScreenStyles } from '../styles/UserProfileScreenStyles';
 
-const UserProfileScreen = () => {
+const UserProfileScreen = ({ route }) => {
+    const { user } = route.params;
     const [userData, setUserData] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editedUserData, setEditedUserData] = useState(null);
@@ -14,7 +15,7 @@ const UserProfileScreen = () => {
 
     const fetchUserData = async () => {
         try {
-            const response = await axios.get(`http://192.168.100.16:3000/api/user?email=${userData.email}`);
+            const response = await axios.get(`http://10.0.2.2:3000/api/user?email=${user.email}`);
             setUserData(response.data.user);
         } catch (error) {
             console.error('Error fetching user data:', error);
@@ -28,7 +29,8 @@ const UserProfileScreen = () => {
 
     const handleSave = async () => {
         try {
-            await axios.put('http://192.168.100.16:3000/api/user/' + userData.email, editedUserData);
+            console.log("Edited User Data:", editedUserData);
+            await axios.put(`http://10.0.2.2:3000/api/user/${user.email}`, editedUserData); // Ensure the URL matches the backend endpoint
             setUserData({ ...editedUserData });
             setIsEditing(false);
         } catch (error) {
@@ -54,9 +56,9 @@ const UserProfileScreen = () => {
                     <Text style={UserProfileScreenStyles.label}>ID Number:</Text>
                     <TextInput
                         style={UserProfileScreenStyles.input}
-                        value={editedUserData?.idNumber || userData.idNumber}
+                        value={userData.idNumber ? String(userData.idNumber) : ''}
                         onChangeText={value => handleChange('idNumber', value)}
-                        editable={isEditing}
+                        editable={false}
                     />
                 </View>
 
@@ -101,11 +103,11 @@ const UserProfileScreen = () => {
 
                 {isEditing ? (
                     <TouchableOpacity style={UserProfileScreenStyles.button} onPress={handleSave}>
-                        <Text style={UserProfileScreenStyles.buttonText}>Save</Text>
+                        <Text style={UserProfileScreenStyles.buttonText}>Save Changes</Text>
                     </TouchableOpacity>
                 ) : (
-                    <TouchableOpacity style={UserProfileScreenStyles.button} onPress={handleEdit}>
-                        <Text style={UserProfileScreenStyles.buttonText}>Edit</Text>
+                    <TouchableOpacity style={[UserProfileScreenStyles.button, { backgroundColor: 'blue' }]} onPress={handleEdit}>
+                        <Text style={UserProfileScreenStyles.buttonText}>Edit Details</Text>
                     </TouchableOpacity>
                 )}
             </View>
